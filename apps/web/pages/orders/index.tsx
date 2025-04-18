@@ -6,22 +6,22 @@ import { useRouter } from 'next/router';
 // Mock order data - replace with actual API call
 const orders = [
   {
-    id: 'ORD001',
+    id: '1',
     date: '2024-03-15',
-    total: 45.97,
-    status: 'Delivered',
+    status: 'delivered',
+    total: 14.95,
     items: [
-      { name: 'Organic Tomatoes', quantity: 5 },
-      { name: 'Fresh Apples', quantity: 3 }
+      { name: 'Local Tomatoes', quantity: 5 },
+      { name: 'Local Lettuce', quantity: 2 }
     ]
   },
   {
-    id: 'ORD002',
-    date: '2024-03-14',
-    total: 32.50,
-    status: 'Processing',
+    id: '2',
+    date: '2024-03-10',
+    status: 'processing',
+    total: 8.97,
     items: [
-      { name: 'Fresh Apples', quantity: 4 }
+      { name: 'Local Tomatoes', quantity: 3 }
     ]
   },
   {

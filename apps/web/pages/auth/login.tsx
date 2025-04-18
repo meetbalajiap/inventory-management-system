@@ -45,11 +45,34 @@ export default function Login() {
         isClosable: true,
       });
       
-      // Redirect based on role
-      if (formData.email === 'meetbalajiap@gmail.com') {
-        router.push('/dashboard');
-      } else {
-        router.push('/');
+      // Get the redirect URL from query params
+      const redirect = router.query.redirect as string;
+      
+      // If there's a redirect URL, use it
+      if (redirect) {
+        router.push(redirect);
+        return;
+      }
+
+      // Otherwise, redirect based on role
+      const account = Object.values(TEST_ACCOUNTS).find(
+        acc => acc.email === formData.email && acc.password === formData.password
+      );
+
+      if (account) {
+        switch (account.role) {
+          case 'super_admin':
+            router.push('/admin/users');
+            break;
+          case 'admin':
+            router.push('/dashboard');
+            break;
+          case 'user':
+            router.push('/');
+            break;
+          default:
+            router.push('/');
+        }
       }
     } catch (error) {
       toast({

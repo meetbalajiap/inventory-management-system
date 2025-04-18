@@ -38,7 +38,7 @@ import { useState } from 'react';
 const initialProducts = [
   {
     id: 1,
-    name: 'Organic Tomatoes',
+    name: 'Fresh Local Tomatoes',
     price: 2.99,
     image: '/images/tomatoes.jpg',
     category: 'Vegetables',

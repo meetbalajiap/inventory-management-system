@@ -7,9 +7,9 @@ import Layout from '../src/components/Layout';
 const cartItems = [
   {
     id: 1,
-    name: 'Organic Tomatoes',
+    name: 'Fresh Local Tomatoes',
     price: 2.99,
-    image: '/images/tomatoes.jpg',
+    image: '/tomatoes.jpg',
     quantity: 2,
   },
   {

@@ -152,6 +152,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           case 'admin':
             router.push('/dashboard');
             break;
+          case 'user':
+            router.push('/');
+            break;
           default:
             router.push('/');
         }

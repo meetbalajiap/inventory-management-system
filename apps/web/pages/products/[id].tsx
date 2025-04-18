@@ -34,11 +34,11 @@ import { useAuth } from '../../src/contexts/AuthContext';
 // Mock product data - replace with actual API call
 const product = {
   id: '1',
-  name: 'Fresh Organic Tomatoes',
-  description: 'Locally grown, pesticide-free tomatoes',
+  name: 'Fresh Local Tomatoes',
+  description: 'Juicy and flavorful tomatoes',
   price: 2.99,
-  image: '/images/placeholder.jpg',
-  category: 'Vegetables',
+  image: '/tomatoes.jpg',
+  category: 'vegetables',
   stock: 50,
 };
 

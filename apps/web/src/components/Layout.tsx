@@ -27,24 +27,25 @@ import { useCart } from '../contexts/CartContext';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
-const NavLink = ({ children, href }: { children: React.ReactNode; href: string }) => {
-  const router = useRouter();
-  const isActive = router.pathname === href;
-  
-  return (
+interface NavLinkProps {
+  href: string;
+  children: React.ReactNode;
+}
+
+const NavLink = ({ href, children }: NavLinkProps) => (
+  <NextLink href={href} passHref>
     <Button
+      as="a"
       variant="ghost"
-      color={isActive ? 'farm.primary' : 'gray.600'}
+      color={useColorModeValue('gray.600', 'gray.200')}
       _hover={{
-        textDecoration: 'none',
         color: 'farm.primary',
       }}
-      onClick={() => router.push(href)}
     >
       {children}
     </Button>
-  );
-};
+  </NextLink>
+);
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -65,18 +66,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     router.push('/');
   };
 
-  // Super admin menu items - access to everything
+  // Super admin menu items - only Manage Users
   const superAdminMenuItems = [
-    { label: 'Manage Users', href: '/admin/users' },
+    { href: '/admin/users', label: 'Manage Users' }
   ];
 
   // Admin menu items
   const adminMenuItems = [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Orders', href: '/orders' },
-    { label: 'Manage Orders', href: '/admin/orders' },
-    { label: 'Manage Products', href: '/admin/products' },
-    { label: 'Referrals', href: '/referrals' },
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/orders', label: 'Orders' },
+    { href: '/admin/orders', label: 'Manage Orders' },
+    { href: '/admin/products', label: 'Manage Products' },
+    { href: '/admin/articles', label: 'Manage Articles' },
+    { href: '/referrals', label: 'Referrals' },
+    { href: '/profile', label: 'Profile' },
   ];
 
   // Customer menu items
@@ -155,14 +158,58 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               direction={'row'}
               spacing={6}
             >
+              {/* Cart Icon - Show for unlogged users and regular users only */}
+              {(!user || user.role === 'user') && (
+                <Box
+                  as={NextLink}
+                  href={user ? "/checkout" : "/auth/login?redirect=/checkout"}
+                  position="relative"
+                  display="flex"
+                  alignItems="center"
+                  _hover={{ color: 'farm.primary' }}
+                >
+                  <Icon as={FiShoppingCart} w={6} h={6} />
+                  {cartCount > 0 && (
+                    <Badge
+                      position="absolute"
+                      top="-1"
+                      right="-1"
+                      colorScheme="red"
+                      borderRadius="full"
+                      fontSize="xs"
+                      px={1}
+                    >
+                      {cartCount}
+                    </Badge>
+                  )}
+                </Box>
+              )}
+
               {!user && (
                 <>
                   <Button
                     as={NextLink}
+                    href="/products"
+                    fontSize={'sm'}
+                    fontWeight={600}
+                    color={'white'}
+                    bg={'farm.primary'}
+                    _hover={{
+                      bg: 'farm.secondary',
+                    }}
+                  >
+                    Shop Now
+                  </Button>
+                  <Button
+                    as={NextLink}
                     href="/auth/login"
                     fontSize={'sm'}
-                    fontWeight={400}
-                    variant={'ghost'}
+                    fontWeight={600}
+                    color={'white'}
+                    bg={'farm.primary'}
+                    _hover={{
+                      bg: 'farm.secondary',
+                    }}
                   >
                     Sign In
                   </Button>
@@ -181,32 +228,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     Sign Up
                   </Button>
                 </>
-              )}
-
-              {/* Only show cart for regular users */}
-              {user?.role === 'user' && (
-                <Box 
-                  as={NextLink}
-                  href={user ? "/checkout" : "/auth/login?redirect=/checkout"}
-                  position="relative"
-                  cursor="pointer"
-                  display="flex"
-                  alignItems="center"
-                >
-                  <Icon as={FiShoppingCart} w={6} h={6} />
-                  {cartCount > 0 && (
-                    <Badge
-                      position="absolute"
-                      top="-1"
-                      right="-1"
-                      colorScheme="red"
-                      borderRadius="full"
-                      fontSize="xs"
-                    >
-                      {cartCount}
-                    </Badge>
-                  )}
-                </Box>
               )}
 
               {user && (

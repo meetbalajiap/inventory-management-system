@@ -35,29 +35,29 @@ import { useAuth } from '../../src/contexts/AuthContext';
 const products = [
   {
     id: '1',
-    name: 'Fresh Organic Tomatoes',
-    description: 'Locally grown, pesticide-free tomatoes',
+    name: 'Fresh Local Tomatoes',
+    description: 'Juicy and flavorful tomatoes',
     price: 2.99,
-    image: '/images/placeholder.jpg',
-    category: 'Vegetables',
+    image: '/tomatoes.jpg',
+    category: 'vegetables',
     stock: 50,
   },
   {
     id: '2',
-    name: 'Organic Lettuce',
-    description: 'Fresh, crisp lettuce from our farm',
+    name: 'Local Lettuce',
+    description: 'Crisp and fresh lettuce',
     price: 1.99,
-    image: '/images/placeholder.jpg',
-    category: 'Vegetables',
+    image: '/lettuce.jpg',
+    category: 'vegetables',
     stock: 30,
   },
   {
     id: '3',
-    name: 'Organic Carrots',
-    description: 'Sweet and crunchy organic carrots',
-    price: 3.49,
-    image: '/images/placeholder.jpg',
-    category: 'Vegetables',
+    name: 'Local Carrots',
+    description: 'Sweet and crunchy carrots',
+    price: 1.49,
+    image: '/carrots.jpg',
+    category: 'vegetables',
     stock: 40,
   },
 ];
@@ -117,8 +117,8 @@ export default function Products() {
         <VStack spacing={8} align="stretch">
           <Box>
             <Heading size="xl">Our Products</Heading>
-            <Text color="gray.600" mt={2}>
-              Fresh, organic produce from our farm
+            <Text fontSize="lg" color="gray.600">
+              Fresh, locally sourced produce from our farm
             </Text>
           </Box>
 

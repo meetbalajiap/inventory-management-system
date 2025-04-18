@@ -25,22 +25,26 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 const Dashboard = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const cardBg = useColorModeValue('white', 'gray.700');
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/auth/login');
+    if (!loading && !user) {
+      router.push('/auth/login?redirect=/dashboard');
     }
-  }, [isAuthenticated, router]);
+  }, [user, loading, router]);
 
-  if (!isAuthenticated) {
+  if (loading) {
     return (
       <Center h="100vh">
         <Spinner size="xl" color="farm.primary" />
       </Center>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   // Mock data - replace with actual API calls
@@ -62,16 +66,13 @@ const Dashboard = () => {
       <Container maxW="container.xl" py={8}>
         <VStack spacing={8} align="stretch">
           <Box>
-            <Heading size="lg" color="farm.primary">
-              Welcome, {user?.name || 'User'}!
-            </Heading>
-            <Text color="gray.600">
-              {user?.farmName ? `Farm: ${user.farmName}` : 'Manage your orders and referrals'}
+            <Heading size="xl">Dashboard</Heading>
+            <Text color="gray.600" mt={2}>
+              Welcome back, {user.name}
             </Text>
           </Box>
 
           <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={6}>
-            {/* Order Statistics */}
             <GridItem>
               <Card bg={cardBg}>
                 <CardHeader>
@@ -82,34 +83,26 @@ const Dashboard = () => {
                     <Stat>
                       <StatLabel>Total Orders</StatLabel>
                       <StatNumber>{orderStats.totalOrders}</StatNumber>
-                      <StatHelpText>All-time orders placed</StatHelpText>
+                      <StatHelpText>
+                        <Badge colorScheme="green">Active</Badge>
+                      </StatHelpText>
                     </Stat>
-
                     <Stat>
                       <StatLabel>Total Spent</StatLabel>
                       <StatNumber>${orderStats.totalSpent.toFixed(2)}</StatNumber>
-                      <StatHelpText>Total amount spent</StatHelpText>
+                      <StatHelpText>
+                        {orderStats.discountEligible && (
+                          <Text color="green.500">
+                            Eligible for {orderStats.discountPercentage}% discount
+                          </Text>
+                        )}
+                      </StatHelpText>
                     </Stat>
-
-                    {orderStats.discountEligible && (
-                      <Box p={4} bg="farm.background" borderRadius="md">
-                        <HStack justify="space-between">
-                          <Text fontWeight="bold">Volume Discount</Text>
-                          <Badge colorScheme="green" fontSize="md">
-                            {orderStats.discountPercentage}% OFF
-                          </Badge>
-                        </HStack>
-                        <Text fontSize="sm" mt={2}>
-                          You qualify for a volume-based discount on your next order!
-                        </Text>
-                      </Box>
-                    )}
                   </VStack>
                 </CardBody>
               </Card>
             </GridItem>
 
-            {/* Referral Statistics */}
             <GridItem>
               <Card bg={cardBg}>
                 <CardHeader>
@@ -120,41 +113,26 @@ const Dashboard = () => {
                     <Stat>
                       <StatLabel>Total Referrals</StatLabel>
                       <StatNumber>{referralStats.totalReferrals}</StatNumber>
-                      <StatHelpText>People you've referred</StatHelpText>
-                    </Stat>
-
-                    <Stat>
-                      <StatLabel>Active Referrals</StatLabel>
-                      <StatNumber>{referralStats.activeReferrals}</StatNumber>
-                      <StatHelpText>Referrals who made purchases</StatHelpText>
-                    </Stat>
-
-                    <Box p={4} bg="farm.background" borderRadius="md">
-                      <HStack justify="space-between">
-                        <Text fontWeight="bold">Referral Discount</Text>
-                        <Badge colorScheme="yellow" fontSize="md">
-                          {referralStats.referralDiscount}% OFF
+                      <StatHelpText>
+                        <Badge colorScheme="green">
+                          {referralStats.activeReferrals} Active
                         </Badge>
-                      </HStack>
-                      <Text fontSize="sm" mt={2}>
-                        You earn {referralStats.referralDiscount}% discount for each successful referral
-                      </Text>
-                    </Box>
+                      </StatHelpText>
+                    </Stat>
+                    <Stat>
+                      <StatLabel>Referral Discount</StatLabel>
+                      <StatNumber>{referralStats.referralDiscount}%</StatNumber>
+                      <StatHelpText>
+                        <Text color="green.500">
+                          Earn {referralStats.referralDiscount}% off for each referral
+                        </Text>
+                      </StatHelpText>
+                    </Stat>
                   </VStack>
                 </CardBody>
               </Card>
             </GridItem>
           </Grid>
-
-          {/* Recent Orders Section */}
-          <Card bg={cardBg}>
-            <CardHeader>
-              <Heading size="md">Recent Orders</Heading>
-            </CardHeader>
-            <CardBody>
-              <Text color="gray.500">No recent orders to display</Text>
-            </CardBody>
-          </Card>
         </VStack>
       </Container>
     </Layout>

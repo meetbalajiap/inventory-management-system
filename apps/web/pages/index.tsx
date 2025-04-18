@@ -17,10 +17,17 @@ import {
   Flex,
   Wrap,
   WrapItem,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import { FiShoppingCart, FiStar, FiTruck, FiThumbsUp, FiClock } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import Layout from '../src/components/Layout';
+import NextLink from 'next/link';
+import FarmArticles from '../src/components/FarmArticles';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 // Mock featured products data
 const featuredProducts = [
@@ -93,7 +100,7 @@ export default function Home() {
 
   return (
     <Layout>
-      {/* Compact Hero Section with Features */}
+      {/* Hero Section */}
       <Box bg="farm.background" py={12}>
         <Container maxW="container.xl">
           <VStack spacing={8} align="center" textAlign="center">
@@ -101,9 +108,16 @@ export default function Home() {
               <Heading size="2xl" color="farm.primary" lineHeight="1.2">
                 Fresh Farm Products Delivered Daily
               </Heading>
-              <Text fontSize="xl" color="gray.600">
-                Experience the taste of fresh, organic produce straight from our tropical farm
+              <Text fontSize="lg" color="gray.600" mb={4}>
+                Experience the taste of fresh, locally sourced produce straight from our farm
               </Text>
+              <HStack spacing={4}>
+                <Text fontWeight="medium">100% locally sourced</Text>
+                <Text>•</Text>
+                <Text fontWeight="medium">Farm to table</Text>
+                <Text>•</Text>
+                <Text fontWeight="medium">Sustainable farming</Text>
+              </HStack>
               <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={6} width="100%" pt={4}>
                 <VStack spacing={2}>
                   <Icon as={FiTruck} w={8} h={8} color="farm.primary" />
@@ -111,24 +125,54 @@ export default function Home() {
                 </VStack>
                 <VStack spacing={2}>
                   <Icon as={FiThumbsUp} w={8} h={8} color="farm.primary" />
-                  <Text fontWeight="medium">100% organic</Text>
+                  <Text fontWeight="medium">100% locally sourced</Text>
                 </VStack>
                 <VStack spacing={2}>
                   <Icon as={FiClock} w={8} h={8} color="farm.primary" />
                   <Text fontWeight="medium">Fresh harvest</Text>
                 </VStack>
               </SimpleGrid>
-              <Button
-                size="lg"
-                colorScheme="green"
-                onClick={() => router.push('/products')}
-                leftIcon={<FiShoppingCart />}
-                mt={4}
-              >
-                Shop Now
-              </Button>
+              <HStack spacing={4} pt={4}>
+                <Button
+                  as={NextLink}
+                  href="/products"
+                  size="lg"
+                  colorScheme="green"
+                >
+                  Shop Now
+                </Button>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                    size="lg"
+                    variant="outline"
+                    colorScheme="green"
+                  >
+                    Learn More
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem as={NextLink} href="/articles/local-usa-produce">
+                      Local USA Produce
+                    </MenuItem>
+                    <MenuItem as={NextLink} href="/articles/seasonal-specials">
+                      Seasonal Specials
+                    </MenuItem>
+                    <MenuItem as={NextLink} href="/articles/farm-to-fork">
+                      Farm to Fork Journey
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
             </VStack>
           </VStack>
+        </Container>
+      </Box>
+
+      {/* Articles Section */}
+      <Box py={12}>
+        <Container maxW="container.xl">
+          <FarmArticles />
         </Container>
       </Box>
 
